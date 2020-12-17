@@ -1,0 +1,17 @@
+﻿  Day13.cpp
+C:\Users\Thies\Documents\Advend of Code 2020\Day13\Day13.cpp(63,26): warning C4244: "Initialisierung": Konvertierung von "__int64" in "int", möglicher Datenverlust
+C:\Users\Thies\Documents\Advend of Code 2020\Day13\Day13.cpp(128,20): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+C:\Users\Thies\Documents\Advend of Code 2020\Day13\Day13.cpp(129,14): warning C4244: "Initialisierung": Konvertierung von "_Ty" in "int", möglicher Datenverlust
+          with
+          [
+              _Ty=__int64
+          ]
+C:\Users\Thies\Documents\Advend of Code 2020\Day13\Day13.cpp(130,11): warning C4244: "Initialisierung": Konvertierung von "_Ty" in "int", möglicher Datenverlust
+          with
+          [
+              _Ty=__int64
+          ]
+C:\Users\Thies\Documents\Advend of Code 2020\Day13\Day13.cpp(147,21): warning C4244: "Initialisierung": Konvertierung von "__int64" in "int", möglicher Datenverlust
+C:\Users\Thies\Documents\Advend of Code 2020\Day13\Day13.cpp(155,20): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+C:\Users\Thies\Documents\Advend of Code 2020\Day13\Day13.cpp(173,20): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+  Day13.vcxproj -> C:\Users\Thies\Documents\Advend of Code 2020\Day13\Debug\Day13.exe
