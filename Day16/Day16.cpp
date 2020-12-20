@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ rule parseRule(string line);
 ticket parseTicket(string line);
 
 int main() {
-	string path = "testinput16_2.txt";
+	string path = "input16.txt";
 	
 	vector<rule> rules;
 	ticket myTicket;
@@ -54,22 +55,6 @@ int main() {
 		}
 		inputFile.close();
 	}
-	/*Print data:
-	for (rule r : rules) {
-		cout << "Name: " << r.name << " Min1: " << r.intervalOneMin << " Max1: " << r.intervalOneMax << " Min2: " << r.intervalTwoMin << " Max2: " << r.intervalTwoMax << "\n";
-	}
-
-	for (int i : myTicket.data) {
-		cout << i << " ";
-	}
-	cout << "\n";
-	for (ticket t : nearbyTickets) {
-		for (int i : t.data) {
-			cout << i << " ";
-		}
-		cout << "\n";
-	}
-	*/
 
 	int solutionPartOne = 0;
 	for (ticket &t : nearbyTickets) {
@@ -91,13 +76,74 @@ int main() {
 
 	cout << "Solution to Part one: " << solutionPartOne << "\n";
 
-	/*
-	//Print nearbyTicket validity:
-	for (ticket t : nearbyTickets) {
-		coplüut << t.isValid << " ";
+	//Part Two
+	map<string, int> mapping;
+	for (rule r : rules) {
+		mapping[r.name] = -1;
 	}
-	cout << "\n";
-	*/
+
+	vector<map<string, bool>> possibleFields;
+	for (int i = 0; i < myTicket.data.size(); i++) {
+		map<string, bool> f;
+		for (rule r : rules) {
+			f[r.name] = true;
+		}
+		possibleFields.push_back(f);
+	}
+
+	bool changed;
+	do {
+		changed = false;
+		for (int i = 0; i < myTicket.data.size(); i++) {
+			//Skip column if it has a fix field already
+			bool skipCol = false;
+			for (pair<string, int> p : mapping) {
+				if (p.second == i) {
+					skipCol = true;
+					break;
+				}
+			}
+			if (skipCol) {
+				continue;
+			}
+			for (ticket t : nearbyTickets) {
+				if (!t.isValid) {
+					continue;
+				}
+				int d = t.data[i];
+				for (rule r : rules) {
+					if (!((d >= r.intervalOneMin && d <= r.intervalOneMax) ||
+						(d >= r.intervalTwoMin && d <= r.intervalTwoMax)) || 
+						((mapping[r.name] > -1) && (mapping[r.name] != i))) {
+						possibleFields[i][r.name] = false;
+					}
+				}
+			}
+
+			//Count how many fields are possible for this index
+			string possibleField;
+			int countPossibleFields = 0;
+			for (pair<string, bool> el : possibleFields[i]) {
+				if (el.second) {
+					countPossibleFields++;
+					possibleField = el.first;
+				}
+			}
+			if (countPossibleFields == 1) {
+				mapping[possibleField] = i;
+				changed = true;
+			}
+		}
+	} while (changed);
+
+
+	long long solutionPartTwo = 1;
+	for (pair<string, int> p : mapping) {
+		if (p.first.substr(0, 9).compare("departure") == 0) {
+			solutionPartTwo *= myTicket.data[p.second];
+		}
+	}
+	cout << "Solution to part two: " << solutionPartTwo << "\n";
 
 	return 0;
 }
