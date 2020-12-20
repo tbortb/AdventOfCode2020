@@ -142,6 +142,7 @@
     <Text Include="input19.txt" />
     <Text Include="input19_2.txt" />
     <Text Include="testinput19.txt" />
+    <Text Include="testinput19_2.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Day19.cpp" />

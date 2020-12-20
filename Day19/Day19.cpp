@@ -8,10 +8,76 @@
 using namespace std;
 
 map<int, string> stringToRegex(map<int, string> regExs);
+void doPartOne(string path);
+void doPartTwo(string path);
 
 int main() {
+	//Takes about 30 min
+	doPartOne("input19.txt");
+	doPartTwo("input19_2.txt");
+
+	return 0;
+}
+
+void doPartTwo(string path) {
 	//load data
-	string path = "input19.txt";
+	string line;
+	map<int, string> inputRegExs;
+	vector<string> lines;
+	fstream inputFile;
+	inputFile.open(path, ios::in);
+	if (inputFile.is_open()) {
+		while (getline(inputFile, line)) {
+			if (line[0] >= 48 && line[0] <= 57) {
+				//It is a rule
+				int splitIndex = line.find(':');
+				inputRegExs[atoi(line.substr(0, splitIndex).c_str())] = '(' + line.substr(splitIndex + 2, line.length() - splitIndex - 2) + ' ' + ')';
+			}
+			else if (line[0] == 'a' || line[0] == 'b')
+				//it is a string to test
+				lines.push_back(line);
+		}
+		inputFile.close();
+	}
+
+	map<int, string> rules = stringToRegex(inputRegExs);
+	string ruleZero = rules[0];
+	int solutionPartTwo = 0;
+	for (string l : lines) {
+		cout << "\nTrying: " << l << endl;
+		for (int insertTimes = 0; insertTimes <= ((l.length() - 24) / 8); insertTimes++) {
+			ruleZero = rules[0];
+			//insert rule 11 insertTimes
+			for (int m = 0; m < insertTimes; m++) {
+				ruleZero = ruleZero.replace(ruleZero.find('E'), 1, rules[11]);
+			}
+			if (insertTimes > 0) {
+				cout << " + " << insertTimes << ", ";
+			}
+			//delete possiblt E and spaces
+			string matchRegEx = "";
+			for (char c : ruleZero) {
+				if (c == 'E' || c == ' ') {
+					continue;
+				}
+				matchRegEx += c;
+			}
+			//cout << matchRegEx << endl;
+			if (regex_match(l, regex(matchRegEx))) {
+				solutionPartTwo++;
+				cout << "Part Two Found: " << solutionPartTwo << "..." << endl;
+				break;
+			}
+		}
+	}
+	//398 is too high
+	cout << "Solution Part Two: " << solutionPartTwo << endl;
+
+}
+
+
+void doPartOne(string path) {
+	//load data
 	string line;
 	map<int, string> inputRegExs;
 	vector<string> lines;
@@ -40,7 +106,7 @@ int main() {
 	}
 
 	cout << "Solution Part One: " << solutionPartOne << endl;
-	return 0;
+
 }
 
 map<int, string> stringToRegex(map<int, string> regExs) {
@@ -63,7 +129,6 @@ map<int, string> stringToRegex(map<int, string> regExs) {
 			if (parsed[p.first]) {
 				continue;
 			}
-
 			string temp = "";
 			int parDepth = 0;
 			int i = 0;
@@ -78,7 +143,7 @@ map<int, string> stringToRegex(map<int, string> regExs) {
 				if (c > 47 && c < 58) {
 					temp += c;
 				}
-				else if (c == ' ' || (c == ')' && temp != "") /*EOL*/) {
+				else if (c == ' ' /*|| (c == ')' && temp != "") /*EOL*/) {
 					if (c == ' ') {
 						temp += c;
 					}

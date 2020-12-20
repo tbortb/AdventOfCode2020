@@ -24,6 +24,9 @@
     <Text Include="input19_2.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="testinput19_2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Day19.cpp">
